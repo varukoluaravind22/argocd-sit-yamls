@@ -1,1 +1,70 @@
-
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: devops-website
+  namespace: sit
+spec:
+  replicas: 2
+  strategy:
+    canary:
+      steps:
+        - setWeight: 20
+        - pause: {}
+        - setWeight: 40
+        - pause: {duration: 10s}
+        - setWeight: 60
+        - pause: {duration: 20s}
+        - setWeight: 80
+        - pause: {duration: 1m}
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+        - name: devops-website
+          image: varukoluaravind22/ci-cd:Devops-Test-Website-32-52b8d44
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 3000
+          securityContext:
+            allowPrivilegeEscalation: false
+          livenessProbe:
+            httpGet:
+              path: /devops
+              port: 8081
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 5
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /devops
+              port: 8081
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 5
+            failureThreshold: 3
+          resources:
+            limits:
+              cpu: 500m
+              memory: 1Gi
+            requests:
+              cpu: 250m
+              memory: 1Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: devops-website-svc
+  namespace: sit
+spec:
+  type: ClusterIP
+  selector:
+    app: backend
+  ports:
+    - port: 8081
+      targetPort: 8081
