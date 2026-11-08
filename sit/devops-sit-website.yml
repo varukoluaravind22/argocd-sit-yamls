@@ -26,7 +26,7 @@ spec:
     spec:
       containers:
         - name: devops-website
-          image: varukoluaravind22/ci-cd:Devops-Test-Website-46-40cad68
+          image: varukoluaravind22/ci-cd:Devops-Test-Website-47-9489316
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 3000
