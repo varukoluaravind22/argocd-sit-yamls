@@ -57,7 +57,7 @@ spec:
               memory: 1Gi
           volumeMounts:
             - name: devops-storage
-              mountPath: /test
+              mountPath: /test/application.properties
               subPath: application.properties
       volumes:
         - name: devops-storage
