@@ -57,12 +57,12 @@ spec:
               memory: 1Gi
           volumeMounts:
             - name: devops-storage
-              mountpath: /test
-               subPath: application.properties
-    volumes:
-      - name: devops-storage
-        persistentVolumeClaim: 
-          claimName: devops-pvc
+              mountPath: /test
+              subPath: application.properties
+      volumes:
+        - name: devops-storage
+          persistentVolumeClaim: 
+            claimName: devops-pvc
 ---
 apiVersion: v1
 kind: Service
